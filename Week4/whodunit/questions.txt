@@ -1,0 +1,53 @@
+1. What’s stdint.h?
+  A header file which contains typedefs and macros, which allows you to set the size of integer variables, 
+  which is important when dealing with programs which will be opened on different machines as it standardizes
+  variable size. 
+  
+2. What’s the point of using uint8_t, uint32_t, int32_t, and uint16_t in a program?
+  These define data types to ensure they are handled in the same manner across different platforms. 
+  E.g. uint8_t is an unsigned int of 8 bits, uint32_t of 32 bits, int32_t is a signed int of 32 bits, 
+  and uint16_t is an unsigned into f 16 bits.
+  
+3. How many bytes is a BYTE, a DWORD, a LONG, and a WORD, respectively?
+  As per bmp.h:
+  A BYTE is 1 byte (8 bits),
+  a DWORD is 4 bytes (32 bits),
+  a LONG is 4 bytes (32 bits), and
+  a WORD is 2 bytes (16 bits).
+
+4. What (in ASCII, decimal, or hexadecimal) must the first two bytes of any BMP file be? Leading bytes used to identify file formats (with high probability) are generally called "magic numbers."
+  The first 2 bytes are "BM" in ASCII, or 0x424d in Hex. These are stored in the BITMAPFILEHEADER in the section "bfType".
+  
+5. What’s the difference between bfSize and biSize?
+  bfSize is the total number of bytes in the entire file.
+  biSize is the number of bytes in the info header only.
+
+6. What does it mean if biHeight is negative?
+  biHeight specifies the height of a bitmap in pixels.
+  -If the biHeight is negative (and BMP is uncompressed RGB), 
+   the bitmap is a top-down DIB (device-independent bitmap)
+   whose origin is the upper left corner.
+  -If positive, the bitmap is a bottom-up DIB; origin at the lower left corner
+ 
+7. What field in BITMAPINFOHEADER specifies the BMP’s color depth (i.e., bits per pixel)?
+  biBitCount.
+
+8. Why might fopen return NULL in lines 24 and 32 of copy.c?
+  If fopen is unable to open the files, it will return NULL as an error-handling mechanism. 
+
+9. Why is the third argument to fread always 1 in our code?
+  The third argument specifies the number of elements of data for fread to read. 
+  In this case, as we are interested in reading one struct at a time, this argument is set to 1.
+  
+10. What value does line 65 of copy.c assign to padding if bi.biWidth is 3?
+  3 would be assigned to padding. Each scanline needs to be a multiple of 4.
+  If bi.biWidth is 3, it means there are 3 pixels * 3 bytes per pixel = 9 bytes. 
+  Therefore, 3 bytes are needed to 'pad' the scanline until it is a multiple of 4 (12).
+  
+11. What does fseek do?
+  It moves to a specified position within a file. In this case it is used to skip any padding,
+  to the first RGB triple of the scanline.
+
+12. What is SEEK_CUR?
+  An integer constant. If the 3rd (whence) argument of fseek is set to SEEK_CUR, 
+  then the offset is relative to the current position indicator.
